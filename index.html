@@ -445,7 +445,7 @@
                                     <i class="fas fa-play ml-0.5"></i>
                                 </div>
                             </div>
-                            <span class="absolute top-2 left-2 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded">
+                            <span contenteditable="true" data-field="tag" title="Klik om categorie te wijzigen" class="absolute top-2 left-2 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded outline-none focus:ring-1 focus:ring-blue-400 cursor-text" onclick="event.stopPropagation()">
                                 ${escapeHtml(v.tag || 'Video')}
                             </span>
                             <button data-action="delete" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition" title="Verwijder">
@@ -623,6 +623,9 @@
             if (item) item[field] = text;
             try { await apiSend(`/api/videos/${id}`, 'PUT', { [field]: text }); }
             catch (err) { console.error(err); }
+            // If the category tag changed, regroup immediately so the card
+            // moves under its new heading without needing a page reload.
+            if (field === 'tag') renderVideos();
         }
 
         function downloadDataJson() {
